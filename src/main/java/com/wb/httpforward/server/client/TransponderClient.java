@@ -39,10 +39,20 @@ public class TransponderClient {
 	}
 	
 	public void responseValue(String responseValue) {
+		if (response.isCommitted()) {
+            //表示PrintWriter的close方法已经调用，所有数据已经从缓冲区刷新到客户端。
+            // response.isCommitted()返回true；
+            return;
+        }
 		result.setResult(responseValue);
 	}
 	
 	public void responseTimeout() {
+		if (response.isCommitted()) {
+            //表示PrintWriter的close方法已经调用，所有数据已经从缓冲区刷新到客户端。
+            // response.isCommitted()返回true；
+            return;
+        }
 		response.setHeader("timeout1", "1");
     	response.addHeader("timeout2", "2");
 	    result.setResult("{\"code\":" + CodeEnum.TIMEOUT.val + ", \"message\":\"server time out.\"}");

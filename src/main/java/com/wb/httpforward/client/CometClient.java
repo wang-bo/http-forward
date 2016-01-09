@@ -64,7 +64,7 @@ public class CometClient implements Runnable {
 	 * 启动客户端，维持长链接，并转发请求
 	 */
 	public void start() {
-		// 参数不增却，直接返回
+		// 参数不正确，直接返回
 		if (method == null || serverUrl == null || clientNo == null) {
 			System.out.println("start Client error: parameter is null");
 			log.error("start Client error: parameter is null");

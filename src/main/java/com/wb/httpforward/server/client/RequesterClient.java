@@ -32,6 +32,11 @@ public class RequesterClient {
 	public void response(ResponseMessage responseMessage) {
 		try {
 			HttpServletResponse response = (HttpServletResponse) asyncContext.getResponse();
+			if (response.isCommitted()) {
+	            //表示PrintWriter的close方法已经调用，所有数据已经从缓冲区刷新到客户端。
+	            // response.isCommitted()返回true；
+	            return;
+	        }
 			int statusCode = responseMessage.getStatusCode();
 			response.setStatus(statusCode);
 			Map<String, Object> headerMap = responseMessage.getHeaderMap();
@@ -66,6 +71,11 @@ public class RequesterClient {
 	public void responseTimeout() throws IOException {
 		try {
 			HttpServletResponse response = (HttpServletResponse) asyncContext.getResponse();
+			if (response.isCommitted()) {
+	            //表示PrintWriter的close方法已经调用，所有数据已经从缓冲区刷新到客户端。
+	            // response.isCommitted()返回true；
+	            return;
+	        }
 			ResponseUtil.setCommonHeader(response);
 			ResponseUtil.sendResponse(response, "{\"code\":" + CodeEnum.TIMEOUT.val + ", \"message\":\"server time out.\"}");
 			asyncContext.complete();

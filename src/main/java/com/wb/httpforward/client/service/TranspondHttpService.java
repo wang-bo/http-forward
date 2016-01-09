@@ -87,16 +87,26 @@ public class TranspondHttpService implements Runnable {
 			int statusCode = response.getStatusLine().getStatusCode();
 			Map<String, Object> responseHeaderMap = HttpClientUtil.getResponseHeaderMap(response);
 			List<String> cookieList = HttpClientUtil.getResponseCookieList(response);
-			// String bodyString = HttpClientUtil.getBodyStringFromResponse(response);
-			byte[] bodyByteArray = HttpClientUtil.getBodyByteArrayFromResponse(response);
+			boolean isBase64 = false;
+			String bodyString = null;
+			String contentType = response.getFirstHeader("Content-Type") == null 
+					? null : response.getFirstHeader("Content-Type").getValue();
+			if (contentType != null && (contentType.contains("text")
+					|| contentType.contains("json") || contentType.contains("javascript"))) {
+				bodyString = HttpClientUtil.getBodyStringFromResponse(response);
+			} else {
+				isBase64 = true;
+				byte[] bodyByteArray = HttpClientUtil.getBodyByteArrayFromResponse(response);
+				bodyString = Base64Util.encode(bodyByteArray);
+			}
+			
 			ResponseMessage responseMessage = new ResponseMessage();
 			responseMessage.setCode(code);
 			responseMessage.setStatusCode(statusCode);
 			responseMessage.setHeaderMap(responseHeaderMap);
 			responseMessage.setCookieList(cookieList);
-			// responseMessage.setBody(bodyString);
-			responseMessage.setBody(Base64Util.encode(bodyByteArray));
-			responseMessage.setBase64(true);
+			responseMessage.setBody(bodyString);
+			responseMessage.setBase64(isBase64);
 			String responseMessageString = JSON.toJSONString(responseMessage);
 			
 			if (ClientConstant.LOG_WITH_BODY || responseMessage.getBody() == null) {
