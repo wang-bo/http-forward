@@ -18,7 +18,7 @@ public class ConfigUtil {
     }
 	
 	public static String getConfigValue(Properties properties, String key, String defaultValue) {
-		String value = properties.getProperty(key);
+		String value = getConfigValue(properties, key);
         if (StringUtils.isBlank(value)) {
         	value = defaultValue;
         }

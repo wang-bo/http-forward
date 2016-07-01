@@ -6,14 +6,16 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * @author www
- * @date 2015年9月13日
+ * 获取配置文件
+ * 
+ * @author wangbo
+ * @date	2016年6月3日 下午9:15:58
  */
 
 public class PropertiesLoader {
 
 	/**
-	 * newProperties 获取配置文件
+	 * 获取配置文件
 	 * @param fileName
 	 * @return 
 	 */
